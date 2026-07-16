@@ -236,16 +236,39 @@ function renderMissingItems(codi) {
     }
 
     section.classList.remove('hidden');
-    list.innerHTML = codi.missing_items.map(item => `
-        <div class="missing-item-card">
-            <div class="missing-item-icon">🛒</div>
-            <div class="missing-item-name">${item.name}</div>
-            <div class="missing-item-reason">${item.reason}</div>
-            <a href="${item.shop_url}" class="missing-item-link" target="_blank">
-                쇼핑하기 →
-            </a>
-        </div>
-    `).join('');
+    
+    let html = '';
+    codi.missing_items.forEach(item => {
+        html += `
+            <div style="margin-bottom: 16px;">
+                <div style="font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">
+                    🛒 ${item.name} <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-secondary);">(${item.reason})</span>
+                </div>
+                <div class="shopping-carousel">
+        `;
+        
+        if (item.products && item.products.length > 0) {
+            item.products.forEach(prod => {
+                html += `
+                    <a href="${prod.link}" target="_blank" class="shopping-card">
+                        <img src="${prod.image_url}" alt="${prod.name}" class="shopping-card-img" onerror="this.src='https://placehold.co/150x200/222222/ffffff?text=Image+Error'" />
+                        <div class="shopping-card-info">
+                            <span class="shopping-brand">${prod.brand}</span>
+                            <span class="shopping-name">${prod.name}</span>
+                            <span class="shopping-price">${prod.price}</span>
+                        </div>
+                    </a>
+                `;
+            });
+        }
+        
+        html += `
+                </div>
+            </div>
+        `;
+    });
+    
+    list.innerHTML = html;
 }
 
 function renderCloset() {
