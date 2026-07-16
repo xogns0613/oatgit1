@@ -1610,3 +1610,12 @@ input, select {
     color: var(--text-primary);
     margin-top: 2px;
 }
+
+.no-image-card {
+    min-width: 180px;
+    padding: var(--space-sm);
+    background: var(--bg-card);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

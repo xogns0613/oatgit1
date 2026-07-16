@@ -250,12 +250,11 @@ function renderMissingItems(codi) {
         if (item.products && item.products.length > 0) {
             item.products.forEach(prod => {
                 html += `
-                    <a href="${prod.link}" target="_blank" class="shopping-card">
-                        <img src="${prod.image_url}" alt="${prod.name}" class="shopping-card-img" onerror="this.src='https://placehold.co/150x200/222222/ffffff?text=Image+Error'" />
+                    <a href="${prod.link}" target="_blank" class="shopping-card no-image-card">
                         <div class="shopping-card-info">
                             <span class="shopping-brand">${prod.brand}</span>
                             <span class="shopping-name">${prod.name}</span>
-                            <span class="shopping-price">${prod.price}</span>
+                            <span class="shopping-price" style="margin-top: 8px;">${prod.price} ➔</span>
                         </div>
                     </a>
                 `;
