@@ -16,20 +16,38 @@ from .weather import calculate_clo
 router = APIRouter(tags=["styling"])
 
 SHOPPING_MOCKS = {
-    "기본 무지 티셔츠": [
+    "무지 티셔츠": [
         {
             "brand": "무신사 스탠다드",
             "name": "릴렉스 핏 크루 넥 반팔 티셔츠",
             "price": "13,900원",
             "image_url": "https://image.msscdn.net/images/goods_img/20210324/1858596/1858596_1_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/1858596"
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=무신사+스탠다드+반팔+티셔츠"
         },
         {
             "brand": "수피마",
             "name": "코튼 베이식 반팔 티셔츠",
             "price": "18,900원",
             "image_url": "https://image.msscdn.net/images/goods_img/20200424/1420713/1420713_4_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/1420713"
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=수피마+반팔"
+        }
+    ],
+    "셔츠": [
+        {
+            "brand": "무신사 스탠다드",
+            "name": "베이식 옥스퍼드 셔츠",
+            "price": "29,900원",
+            "image_url": "https://image.msscdn.net/images/goods_img/20190823/1127076/1127076_1_500.jpg",
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=무신사+스탠다드+옥스퍼드+셔츠"
+        }
+    ],
+    "니트": [
+        {
+            "brand": "수아레",
+            "name": "하프 집업 니트",
+            "price": "49,900원",
+            "image_url": "https://image.msscdn.net/images/goods_img/20210825/2088899/2088899_1_500.jpg",
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=수아레+하프+집업+니트"
         }
     ],
     "슬랙스": [
@@ -38,14 +56,14 @@ SHOPPING_MOCKS = {
             "name": "와이드 히든 밴딩 슬랙스",
             "price": "33,900원",
             "image_url": "https://image.msscdn.net/images/goods_img/20190228/970714/970714_3_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/970714"
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=무신사+스탠다드+와이드+슬랙스"
         },
         {
             "brand": "컨셉원",
-            "name": "TR 테이퍼드 히든밴딩 슬랙스",
+            "name": "테이퍼드 히든밴딩 슬랙스",
             "price": "39,800원",
             "image_url": "https://image.msscdn.net/images/goods_img/20200813/1547849/1547849_1_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/1547849"
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=컨셉원+슬랙스"
         }
     ],
     "데님 팬츠": [
@@ -54,14 +72,23 @@ SHOPPING_MOCKS = {
             "name": "와이드 데님 팬츠",
             "price": "49,000원",
             "image_url": "https://image.msscdn.net/images/goods_img/20180219/715454/715454_3_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/715454"
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=토피+와이드+데님"
         },
         {
             "brand": "피스워커",
             "name": "스톤 워시드 데님",
             "price": "52,000원",
             "image_url": "https://image.msscdn.net/images/goods_img/20190220/961111/961111_1_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/961111"
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=피스워커+데님"
+        }
+    ],
+    "면바지": [
+        {
+            "brand": "지오다노",
+            "name": "테이퍼드 치노 팬츠",
+            "price": "29,800원",
+            "image_url": "https://image.msscdn.net/images/goods_img/20200115/1271638/1271638_1_500.jpg",
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=지오다노+치노+팬츠"
         }
     ],
     "가디건": [
@@ -70,14 +97,7 @@ SHOPPING_MOCKS = {
             "name": "오버핏 부클 가디건",
             "price": "79,000원",
             "image_url": "https://image.msscdn.net/images/goods_img/20200827/1566412/1566412_1_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/1566412"
-        },
-        {
-            "brand": "수아레",
-            "name": "워셔블 하프 집업 니트",
-            "price": "49,900원",
-            "image_url": "https://image.msscdn.net/images/goods_img/20210825/2088899/2088899_1_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/2088899"
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=쿠어+가디건"
         }
     ],
     "블레이저": [
@@ -86,7 +106,25 @@ SHOPPING_MOCKS = {
             "name": "베이식 블레이저",
             "price": "69,900원",
             "image_url": "https://image.msscdn.net/images/goods_img/20190228/970716/970716_1_500.jpg",
-            "link": "https://www.musinsa.com/app/goods/970716"
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=무신사+스탠다드+블레이저"
+        }
+    ],
+    "코트": [
+        {
+            "brand": "인사일런스",
+            "name": "솔리스트 캐시미어 코트",
+            "price": "189,000원",
+            "image_url": "https://image.msscdn.net/images/goods_img/20170914/634731/634731_4_500.jpg",
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=인사일런스+캐시미어+코트"
+        }
+    ],
+    "패딩": [
+        {
+            "brand": "내셔널지오그래픽",
+            "name": "타루가 RDS 숏패딩",
+            "price": "299,000원",
+            "image_url": "https://image.msscdn.net/images/goods_img/20200730/1529126/1529126_3_500.jpg",
+            "link": "https://www.musinsa.com/search/musinsa/goods?q=내셔널지오그래픽+타루가"
         }
     ]
 }
@@ -153,6 +191,10 @@ async def recommend_codi(request: StylingRequest):
     
     recommendations = []
     
+    basic_tops = [("무지 티셔츠", "화이트"), ("셔츠", "스카이블루"), ("니트", "네이비")]
+    basic_bottoms = [("슬랙스", "블랙"), ("데님 팬츠", "블루"), ("면바지", "베이지")]
+    basic_outers = [("블레이저", "네이비"), ("가디건", "그레이"), ("코트", "블랙") if clo >= 1.5 else ("패딩", "블랙")]
+    
     # 3개의 추천 코디 생성
     for i in range(1, 4):
         items = []
@@ -164,8 +206,9 @@ async def recommend_codi(request: StylingRequest):
             top = random.choice(tops)
             items.append(CodiItem(category="상의", name=top.tags.sub_category, color=top.tags.color, image_url=top.nukki_image_url))
         else:
-            items.append(CodiItem(category="상의", name="기본 무지 티셔츠", color="화이트"))
-            missing.append({"name": "기본 무지 티셔츠", "reason": "모든 코디의 기본이 되는 이너", "products": SHOPPING_MOCKS.get("기본 무지 티셔츠", [])})
+            top_name, top_color = basic_tops[(i-1) % len(basic_tops)]
+            items.append(CodiItem(category="상의", name=f"기본 {top_name}", color=top_color))
+            missing.append({"name": f"기본 {top_name}", "reason": "모든 코디의 기본이 되는 이너", "products": SHOPPING_MOCKS.get(top_name, [])})
             is_missing = True
             
         # 2. 하의 선택
@@ -173,9 +216,9 @@ async def recommend_codi(request: StylingRequest):
             bottom = random.choice(bottoms)
             items.append(CodiItem(category="하의", name=bottom.tags.sub_category, color=bottom.tags.color, image_url=bottom.nukki_image_url))
         else:
-            bottom_name = "슬랙스" if tpo == "출근" else "데님 팬츠"
-            items.append(CodiItem(category="하의", name=f"베이직 {bottom_name}", color="블랙"))
-            missing.append({"name": f"베이직 {bottom_name}", "reason": f"{tpo}에 가장 활용도가 높은 팬츠", "products": SHOPPING_MOCKS.get(bottom_name, [])})
+            bot_name, bot_color = basic_bottoms[(i-1) % len(basic_bottoms)]
+            items.append(CodiItem(category="하의", name=f"베이직 {bot_name}", color=bot_color))
+            missing.append({"name": f"베이직 {bot_name}", "reason": f"활용도가 가장 높은 팬츠", "products": SHOPPING_MOCKS.get(bot_name, [])})
             is_missing = True
             
         # 3. 아우터 선택 (날씨가 쌀쌀할 때)
@@ -186,9 +229,9 @@ async def recommend_codi(request: StylingRequest):
                 outer = random.choice(outers)
                 items.append(CodiItem(category="아우터", name=outer.tags.sub_category, color=outer.tags.color, image_url=outer.nukki_image_url))
             else:
-                outer_name = "블레이저" if tpo == "출근" else "가디건"
-                items.append(CodiItem(category="아우터", name=f"깔끔한 {outer_name}", color="네이비"))
-                missing.append({"name": f"깔끔한 {outer_name}", "reason": f"지금 날씨에 꼭 필요한 {tpo} 아우터", "products": SHOPPING_MOCKS.get(outer_name, [])})
+                out_name, out_color = basic_outers[(i-1) % len(basic_outers)]
+                items.append(CodiItem(category="아우터", name=f"깔끔한 {out_name}", color=out_color))
+                missing.append({"name": f"깔끔한 {out_name}", "reason": f"지금 날씨에 꼭 필요한 아우터", "products": SHOPPING_MOCKS.get(out_name, [])})
                 is_missing = True
                 
         reasoning = generate_reasoning(tpo, temp, has_outer, is_missing)
