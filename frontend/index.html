@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>옷깃 OatGit — AI 퍼스널 스타일링 코디네이터</title>
+    <meta name="description" content="AI가 당신의 옷장을 분석하고, 날씨와 체형에 맞는 완벽한 코디를 추천합니다.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ═══ 스플래시 로딩 ═══ -->
+    <div id="splash-screen" class="splash">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <span class="logo-icon">👔</span>
+                <h1 class="logo-text">옷깃</h1>
+                <p class="logo-sub">OatGit</p>
+            </div>
+            <div class="splash-loader">
+                <div class="loader-bar"></div>
+            </div>
+            <p class="splash-tagline">AI가 만드는 당신만의 스타일</p>
+        </div>
+    </div>
+
+    <!-- ═══ 잠금 화면 ═══ -->
+    <div id="lock-screen" class="lock-screen hidden">
+        <div class="lock-content">
+            <div class="lock-icon">🔒</div>
+            <h2 class="lock-title">비밀번호 입력</h2>
+            <p class="lock-desc">OatGit에 접속하려면 비밀번호를 입력하세요.</p>
+            <div class="lock-input-group">
+                <input type="password" id="password-input" class="form-input" placeholder="비밀번호" maxlength="4">
+                <button id="btn-unlock" class="btn-primary">접속</button>
+            </div>
+            <p id="lock-error" class="lock-error hidden">비밀번호가 일치하지 않습니다.</p>
+        </div>
+    </div>
+
+    <!-- ═══ 메인 앱 ═══ -->
+    <div id="app" class="app hidden">
+
+        <!-- ── 상단 헤더 ── -->
+        <header id="main-header" class="header">
+            <div class="header-left">
+                <span class="header-logo">👔</span>
+                <h1 class="header-title">옷깃</h1>
+            </div>
+            <div class="header-right">
+                <button id="btn-notification" class="header-btn" aria-label="알림">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notification-dot"></span>
+                </button>
+                <button id="btn-settings" class="header-btn" aria-label="설정">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- ── 페이지 컨테이너 ── -->
+        <main id="page-container" class="page-container">
+
+            <!-- ═══ 페이지 1: 홈/대시보드 ═══ -->
+            <section id="page-home" class="page active">
+                <!-- 날씨 카드 -->
+                <div id="weather-card" class="weather-card">
+                    <div class="weather-bg-orb orb-1"></div>
+                    <div class="weather-bg-orb orb-2"></div>
+                    <div class="weather-info">
+                        <div class="weather-location">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span id="weather-city">서울</span>
+                        </div>
+                        <div class="weather-temp-row">
+                            <span id="weather-icon" class="weather-icon">☀️</span>
+                            <span id="weather-temp" class="weather-temp">22°</span>
+                        </div>
+                        <div class="weather-details">
+                            <span id="weather-condition" class="weather-condition">맑음</span>
+                            <span class="weather-divider">·</span>
+                            <span id="weather-feels">체감 20.5°</span>
+                            <span class="weather-divider">·</span>
+                            <span id="weather-humidity">습도 55%</span>
+                        </div>
+                        <div id="weather-layer-guide" class="weather-layer-guide">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <span>얇은 긴팔 상의 또는 가벼운 가디건을 추천합니다.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TPO 필터 -->
+                <div class="tpo-section">
+                    <h2 class="section-title">오늘의 코디</h2>
+                    <div id="tpo-filter" class="tpo-filter">
+                        <button class="tpo-btn active" data-tpo="출근">
+                            <span class="tpo-emoji">💼</span>
+                            <span>출근</span>
+                        </button>
+                        <button class="tpo-btn" data-tpo="데이트">
+                            <span class="tpo-emoji">💕</span>
+                            <span>데이트</span>
+                        </button>
+                        <button class="tpo-btn" data-tpo="일상">
+                            <span class="tpo-emoji">☕</span>
+                            <span>일상</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 코디 추천 카드 슬라이더 -->
+                <div class="codi-section">
+                    <div id="codi-slider" class="codi-slider">
+                        <!-- JS에서 동적 생성 -->
+                    </div>
+                    <div id="codi-dots" class="codi-dots">
+                        <!-- JS에서 동적 생성 -->
+                    </div>
+                </div>
+
+                <!-- 부족한 아이템 추천 -->
+                <div id="missing-items-section" class="missing-section hidden">
+                    <h3 class="section-subtitle">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                        이 코디에 어울리는 추천 아이템
+                    </h3>
+                    <div id="missing-items-list" class="missing-items-list">
+                        <!-- JS에서 동적 생성 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ 페이지 2: 디지털 옷장 ═══ -->
+            <section id="page-closet" class="page">
+                <div class="closet-header">
+                    <h2 class="section-title">내 옷장</h2>
+                    <div class="closet-stats">
+                        <span id="closet-count" class="closet-count">0벌</span>
+                    </div>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div id="closet-filter" class="closet-filter">
+                    <button class="filter-chip active" data-filter="전체">전체</button>
+                    <button class="filter-chip" data-filter="상의">상의</button>
+                    <button class="filter-chip" data-filter="하의">하의</button>
+                    <button class="filter-chip" data-filter="아우터">아우터</button>
+                    <button class="filter-chip" data-filter="원피스">원피스</button>
+                    <button class="filter-chip" data-filter="신발">신발</button>
+                    <button class="filter-chip" data-filter="액세서리">액세서리</button>
+                </div>
+
+                <!-- 옷장 그리드 -->
+                <div id="closet-grid" class="closet-grid">
+                    <!-- 빈 상태 -->
+                    <div id="closet-empty" class="closet-empty">
+                        <div class="empty-illustration">
+                            <span>👗</span>
+                        </div>
+                        <h3>아직 등록된 옷이 없어요</h3>
+                        <p>옷 사진을 업로드하면 AI가 자동으로<br>분류하고 태깅해 드려요!</p>
+                        <button id="btn-upload-empty" class="btn-primary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            첫 번째 옷 등록하기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 업로드 FAB -->
+                <button id="btn-upload-fab" class="fab-upload" aria-label="옷 업로드">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+            </section>
+
+            <!-- ═══ 페이지 3: 체형 프로필 ═══ -->
+            <section id="page-profile" class="page">
+                <h2 class="section-title">내 프로필</h2>
+                <p class="section-desc">체형 정보를 입력하면 더 정확한 코디를 추천받을 수 있어요.</p>
+
+                <form id="profile-form" class="profile-form">
+                    <!-- 성별 -->
+                    <div class="form-group">
+                        <label class="form-label">성별</label>
+                        <div class="gender-selector">
+                            <button type="button" class="gender-btn active" data-gender="남성">
+                                <span class="gender-icon">🧑</span>
+                                <span>남성</span>
+                            </button>
+                            <button type="button" class="gender-btn" data-gender="여성">
+                                <span class="gender-icon">👩</span>
+                                <span>여성</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 키 -->
+                    <div class="form-group">
+                        <label class="form-label" for="input-height">키 (cm)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="input-height" class="form-input" value="175" min="100" max="250" step="1">
+                            <span class="input-unit">cm</span>
+                        </div>
+                        <input type="range" id="range-height" class="form-range" min="140" max="210" value="175" step="1">
+                    </div>
+
+                    <!-- 몸무게 -->
+                    <div class="form-group">
+                        <label class="form-label" for="input-weight">몸무게 (kg)</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="input-weight" class="form-input" value="70" min="30" max="200" step="1">
+                            <span class="input-unit">kg</span>
+                        </div>
+                        <input type="range" id="range-weight" class="form-range" min="35" max="150" value="70" step="1">
+                    </div>
+
+                    <!-- 체형 -->
+                    <div class="form-group">
+                        <label class="form-label">체형 특징</label>
+                        <div class="body-type-grid">
+                            <button type="button" class="body-type-btn" data-type="역삼각형">
+                                <div class="body-shape shape-inverted-triangle"></div>
+                                <span>역삼각형</span>
+                                <small>상체 발달</small>
+                            </button>
+                            <button type="button" class="body-type-btn" data-type="삼각형">
+                                <div class="body-shape shape-triangle"></div>
+                                <span>삼각형</span>
+                                <small>하체 발달</small>
+                            </button>
+                            <button type="button" class="body-type-btn" data-type="모래시계형">
+                                <div class="body-shape shape-hourglass"></div>
+                                <span>모래시계</span>
+                                <small>허리 강조</small>
+                            </button>
+                            <button type="button" class="body-type-btn active" data-type="표준형">
+                                <div class="body-shape shape-standard"></div>
+                                <span>표준형</span>
+                                <small>밸런스</small>
+                            </button>
+                            <button type="button" class="body-type-btn" data-type="일자형">
+                                <div class="body-shape shape-straight"></div>
+                                <span>일자형</span>
+                                <small>직선 실루엣</small>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-save-profile" class="btn-primary btn-full">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        프로필 저장하기
+                    </button>
+                </form>
+            </section>
+        </main>
+
+        <!-- ── 하단 탭 바 ── -->
+        <nav id="tab-bar" class="tab-bar">
+            <button class="tab-btn active" data-page="home">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>홈</span>
+            </button>
+            <button class="tab-btn" data-page="closet">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><path d="M9 10h1"/><path d="M14 10h1"/></svg>
+                <span>옷장</span>
+            </button>
+            <button class="tab-btn" data-page="profile">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>프로필</span>
+            </button>
+        </nav>
+
+        <!-- ═══ 업로드 모달 ═══ -->
+        <div id="upload-modal" class="modal-overlay hidden">
+            <div class="modal-sheet">
+                <div class="modal-handle"></div>
+                <h3 class="modal-title">옷 등록하기</h3>
+                <p class="modal-desc">사진을 업로드하면 AI가 자동으로 배경을 제거하고 태그를 분류합니다.</p>
+
+                <div id="upload-area" class="upload-area">
+                    <input type="file" id="file-input" accept="image/*" hidden>
+                    <div id="upload-placeholder" class="upload-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        <p>사진을 여기에 드래그하거나<br>클릭하여 선택하세요</p>
+                        <span class="upload-hint">JPG, PNG 지원 · 최대 10MB</span>
+                    </div>
+                    <div id="upload-preview" class="upload-preview hidden">
+                        <img id="preview-img" src="" alt="미리보기">
+                        <button id="btn-clear-preview" class="btn-clear-preview">✕</button>
+                    </div>
+                </div>
+
+                <!-- 업로드 진행 상태 -->
+                <div id="upload-progress" class="upload-progress hidden">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <p id="progress-text" class="progress-text">AI가 이미지를 분석하고 있습니다...</p>
+                </div>
+
+                <!-- 태그 결과 (업로드 후 표시) -->
+                <div id="tag-result" class="tag-result hidden">
+                    <h4>AI 자동 태깅 결과</h4>
+                    <div class="tag-grid">
+                        <div class="tag-field">
+                            <label>카테고리</label>
+                            <select id="tag-category" class="tag-select">
+                                <option value="상의">상의</option>
+                                <option value="하의">하의</option>
+                                <option value="아우터">아우터</option>
+                                <option value="원피스">원피스</option>
+                                <option value="신발">신발</option>
+                                <option value="액세서리">액세서리</option>
+                            </select>
+                        </div>
+                        <div class="tag-field">
+                            <label>세부 분류</label>
+                            <select id="tag-subcategory" class="tag-select">
+                                <option value="티셔츠">티셔츠</option>
+                                <option value="셔츠">셔츠</option>
+                                <option value="니트">니트</option>
+                                <option value="맨투맨">맨투맨</option>
+                                <option value="슬랙스">슬랙스</option>
+                                <option value="데님">데님</option>
+                                <option value="자켓">자켓</option>
+                                <option value="코트">코트</option>
+                                <option value="패딩">패딩</option>
+                            </select>
+                        </div>
+                        <div class="tag-field">
+                            <label>색상</label>
+                            <select id="tag-color" class="tag-select">
+                                <option value="블랙">블랙</option>
+                                <option value="화이트">화이트</option>
+                                <option value="그레이">그레이</option>
+                                <option value="네이비">네이비</option>
+                                <option value="베이지">베이지</option>
+                                <option value="브라운">브라운</option>
+                                <option value="블루">블루</option>
+                                <option value="레드">레드</option>
+                                <option value="그린">그린</option>
+                                <option value="핑크">핑크</option>
+                            </select>
+                        </div>
+                        <div class="tag-field">
+                            <label>패턴</label>
+                            <select id="tag-pattern" class="tag-select">
+                                <option value="무지">무지</option>
+                                <option value="스트라이프">스트라이프</option>
+                                <option value="체크">체크</option>
+                                <option value="도트">도트</option>
+                                <option value="플로럴">플로럴</option>
+                                <option value="그래픽">그래픽</option>
+                            </select>
+                        </div>
+                        <div class="tag-field">
+                            <label>계절</label>
+                            <select id="tag-season" class="tag-select">
+                                <option value="사계절">사계절</option>
+                                <option value="봄">봄</option>
+                                <option value="여름">여름</option>
+                                <option value="가을">가을</option>
+                                <option value="겨울">겨울</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button id="btn-cancel-upload" class="btn-secondary" type="button">취소</button>
+                    <button id="btn-submit-upload" class="btn-primary" type="button" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                        내 옷장에 저장
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ 토스트 알림 ═══ -->
+        <div id="toast" class="toast hidden">
+            <span id="toast-icon" class="toast-icon">✅</span>
+            <span id="toast-message" class="toast-message">저장되었습니다.</span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
