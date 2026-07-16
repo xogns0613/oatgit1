@@ -7,7 +7,7 @@
 // TODO: Render 배포 완료 후 아래의 'https://your-backend-url.onrender.com/api' 부분을 실제 주소로 변경하세요.
 const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:8000/api'
-    : 'https://your-backend-url.onrender.com/api';
+    : 'https://oatgit1.onrender.com/api';
 
 // ══════════════════════════════════════
 // State
